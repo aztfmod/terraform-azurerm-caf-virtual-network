@@ -14,8 +14,9 @@ Creates a virtual network with:
 Reference the module to a specific version (recommended):
 ```hcl
 module "virtual_network" {
-    source                  = "git://github.com/aztfmod/virtual_network.git?ref=v1.1"
-  
+    source  = "aztfmod/caf-virtual-network/azurerm"
+    version = "0.1.0"
+
     virtual_network_rg                = var.rg
     prefix                            = var.prefix
     location                          = var.location
