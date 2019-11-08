@@ -6,10 +6,10 @@ for_each            = azurerm_network_security_group.nsg_obj
 
 name                = each.value.name
 target_resource_id  = each.value.id
-eventhub_name                    = "${var.diagnostics_map.eh_name}"
+eventhub_name                    = var.diagnostics_map.eh_name
 eventhub_authorization_rule_id   = "${var.diagnostics_map.eh_id}/authorizationrules/RootManageSharedAccessKey"
-log_analytics_workspace_id       = "${var.log_analytics_workspace.id}"
-storage_account_id               = "${var.diagnostics_map.diags_sa}"
+log_analytics_workspace_id       = var.log_analytics_workspace.id
+storage_account_id               = var.diagnostics_map.diags_sa
 log {
     
     category =  "NetworkSecurityGroupRuleCounter"

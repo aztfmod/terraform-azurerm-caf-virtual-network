@@ -1,6 +1,3 @@
-
-# // Creates the vnet's virtual subnetworks
-
 resource "azurerm_subnet" "v_subnet" {
   lifecycle {
         ignore_changes = [network_security_group_id]
@@ -12,7 +9,19 @@ resource "azurerm_subnet" "v_subnet" {
   resource_group_name     = var.resource_group
   virtual_network_name    = var.virtual_network_name
   address_prefix          = each.value.cidr
-  service_endpoints       = each.value.service_endpoints
+  service_endpoints       = lookup(each.value, "service_endpoints", [])
+
+  dynamic "delegation" {
+    for_each = lookup(each.value, "delegation", {}) != {} ? [1] : []
+    
+    content {
+     name = lookup(each.value.delegation, "name", null)
+
+     service_delegation {
+       name = lookup(each.value.delegation.service_delegation, "name", null)
+       actions = lookup(each.value.delegation.service_delegation, "actions", null)
+     }
+    }
+  }
+
 }
-
-

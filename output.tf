@@ -1,4 +1,3 @@
-//Exports main data for peering and security post-deployment touch
 output "vnet" {
   value = {
   "vnet_name"           = azurerm_virtual_network.vnet.name
@@ -10,6 +9,7 @@ output "vnet" {
 
 output "vnet_obj" {
   value = azurerm_virtual_network.vnet
+  description = "Virtual network object"
 }
 
 output "subnet_ids_map" {
@@ -18,6 +18,7 @@ output "subnet_ids_map" {
 
 output "nsg_obj" {
   value = module.nsg.nsg_obj
+  description = "Returns the complete set of NSG objects created in the virtual network"
 }
 
 output "vnet_subnets" {

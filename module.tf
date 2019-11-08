@@ -5,14 +5,19 @@ resource "azurerm_virtual_network" "vnet" {
   location              = var.location
   resource_group_name   = var.virtual_network_rg
   address_space         = var.networking_object.vnet.address_space
-  dns_servers           = var.networking_object.vnet.dns
   tags                  = local.tags
 
-  # ddos_protection_plan {
-  #   id     = "${azurerm_ddos_protection_plan.test.id}"
-  #   enable = true
-  # }
-  
+  dns_servers           = lookup(var.networking_object.vnet, "dns", null)
+
+   dynamic "ddos_protection_plan" {
+    for_each = lookup(var.networking_object.vnet, "enable_ddos_std", false) == true ? [1] : []
+    
+    content {
+      id     = var.networking_object.vnet.ddos_id
+      enable = var.networking_object.vnet.enable_ddos_std
+    }
+  }
+
 }
 
 module "special_subnets" {
@@ -46,8 +51,6 @@ module "nsg" {
   log_analytics_workspace   = var.log_analytics_workspace
   diagnostics_map           = var.diagnostics_map
 }
-
-
 
 resource "azurerm_subnet_network_security_group_association" "nsg_vnet_association" {
   for_each                  = module.subnets.subnet_ids_map
