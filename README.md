@@ -6,6 +6,7 @@ Creates a virtual network with:
 * DNS Settings
 * Subnet creation
 * NSG creation
+* DDoS protection standard attachment
 * Diagnostics logging for the virtual network
 * Diagnostics logging for the each sub-network
 * Diagnostics logging for the network security groups
@@ -17,21 +18,6 @@ module "virtual_network" {
     source  = "aztfmod/caf-virtual-network/azurerm"
     version = "0.1.0"
 
-    virtual_network_rg                = var.rg
-    prefix                            = var.prefix
-    location                          = var.location
-    networking_object                 = var.shared_services_vnet
-    tags                              = var.tags
-    diagnostics_map                   = var.diagnostics_map
-    log_analytics_workspace           = var.log_analytics_workspace
-}
-```
-
-Or get the latest version
-```hcl
-module "virtual_network" {
-    source                  = "git://github.com/aztfmod/virtual_network.git?ref=latest"
-  
     virtual_network_rg                = var.rg
     prefix                            = var.prefix
     location                          = var.location
@@ -139,23 +125,8 @@ Example
   }
 ```
 
-## opslogs_retention_period
-(Optional) Number of days to keep operations logs inside storage account"
-
-```hcl
-variable "opslogs_retention_period" {
-  description = "(Optional) Number of days to keep operations logs inside storage account"
-  default = 60
-}
-```
-Example
-```hcl
-opslogs_retention_period = 90
-
-```
-
 ## networking_object
-(Required) Configuration object describing the networking configuration, as described below"
+(Required) Configuration object describing the networking configuration, as described below:
 
 ```hcl
 variable "networking_object" {
@@ -170,13 +141,15 @@ Sample of network configuration object below
             name                = "sg1-vnet-dmz"
             address_space       = ["10.101.4.0/22"]     # 10.100.4.0 - 10.100.7.255
             dns                 = ["192.168.0.16", "192.168.0.64"]
+            enable_ddos_std     = true
+            ddos_id             = "/subscriptions/00000000-0000-0000-0000-0000000000000/resourceGroups/testrg/providers/Microsoft.Network/ddosProtectionPlans/myddos"
+
         }
         specialsubnets     = {
                 AzureFirewallSubnet = {
                 name                = "AzureFirewallSubnet"
                 cidr                = "10.101.4.0/25"
-                service_endpoints   = []
-                }
+               }
             }
         subnets = {
             Subnet_1        = {
@@ -190,6 +163,13 @@ Sample of network configuration object below
                     ["SMB-In", "103", "Inbound", "Allow", "tcp", "*", "445", "*", "*"],
                 ]
                 nsg_outbound        = []
+                delegation          = {
+                    name = "acctestdelegation1" 
+                    service_delegation = {
+                    name    = "Microsoft.ContainerInstance/containerGroups"
+                    actions = ["Microsoft.Network/virtualNetworks/subnets/join/action", "Microsoft.Network/virtualNetworks/subnets/prepareNetworkPolicies/action"]
+                    }
+                }
             }
             Subnet_2             = {
                 name                = "SQL_Servers"
