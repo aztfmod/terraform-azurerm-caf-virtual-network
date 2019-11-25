@@ -16,7 +16,7 @@ Reference the module to a specific version (recommended):
 ```hcl
 module "virtual_network" {
     source  = "aztfmod/caf-virtual-network/azurerm"
-    version = "0.1.0"
+    version = "0.2.0"
 
     virtual_network_rg                = var.rg
     prefix                            = var.prefix
@@ -109,6 +109,30 @@ Example
       eh_name       = "opslogs"
   }
 ```
+
+## diagnostics_settings
+(Required) Map with the diagnostics settings for virtual network deployment.
+See the required structure in the following example or in the diagnostics module documentation.
+
+```hcl
+variable "diagnostics_settings" {
+ description = "(Required) Map with the diagnostics settings for public virtual network deployment"
+}
+```
+Example
+```hcl
+diagnostics_settings = {
+    log = [
+                # ["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period] 
+                ["VMProtectionAlerts", true, true, 60],
+        ]
+    metric = [
+                #["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]                 
+                  ["AllMetrics", true, true, 60],
+    ]
+}
+```
+
 ## log_analytics_workspace
 (Required) contains the log analytics workspace details for operations diagnostics."
 
