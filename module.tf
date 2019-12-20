@@ -1,7 +1,15 @@
 // Creates the networks virtual network, the subnets and associated NSG, with a special section for AzureFirewallSubnet
+module "caf_name_vnet" {
+  source = "../terraform-azurerm-caf-naming/"
+  
+  name    = var.name
+  type    = "vnet"
+  convention  = var.convention
+}
+
 
 resource "azurerm_virtual_network" "vnet" {
-  name                  = "${var.prefix}${var.networking_object.vnet.name}"
+  name                  = module.caf_name_vnet.vnet
   location              = var.location
   resource_group_name   = var.virtual_network_rg
   address_space         = var.networking_object.vnet.address_space
@@ -17,7 +25,6 @@ resource "azurerm_virtual_network" "vnet" {
       enable = var.networking_object.vnet.enable_ddos_std
     }
   }
-
 }
 
 module "special_subnets" {

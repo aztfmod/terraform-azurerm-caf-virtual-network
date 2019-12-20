@@ -33,3 +33,7 @@ variable "diagnostics_settings" {
 variable "networking_object" {
   description = "(Required) configuration object describing the networking configuration, as described in README"
 }
+
+variable "convention" {
+  description = "(Required) Naming convention method to use"  
+}
