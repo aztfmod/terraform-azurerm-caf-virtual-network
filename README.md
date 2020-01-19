@@ -7,6 +7,7 @@ Creates a virtual network with:
 * Subnet creation
 * NSG creation
 * DDoS protection standard attachment
+* Network Watcher Flow Logs and Traffic Analytics
 * Diagnostics logging for the virtual network
 * Diagnostics logging for the each sub-network
 * Diagnostics logging for the network security groups
@@ -16,7 +17,7 @@ Reference the module to a specific version (recommended):
 ```hcl
 module "virtual_network" {
     source  = "aztfmod/caf-virtual-network/azurerm"
-    version = "0.2.0"
+    version = "0.x.y"
 
     virtual_network_rg                = var.rg
     prefix                            = var.prefix
@@ -28,9 +29,9 @@ module "virtual_network" {
 }
 ```
 
-# Parameters
+## Parameters
 
-## virtual_network_rg
+### virtual_network_rg
 Required) Name of the resource group where to create the vnet
 ```hcl
 variable "virtual_network_rg" {
@@ -44,7 +45,7 @@ Example
 virtual_network_rg = "my-vnet"
 ```
 
-## location
+### location
 (Required) Define the region where the resource groups will be created
 ```hcl
 
@@ -58,7 +59,7 @@ Example
     location    = "southeastasia"
 ```
 
-## prefix
+### prefix
 (Optional) You can use a prefix to add to the list of resource groups you want to create
 ```hcl
 variable "prefix" {
@@ -78,7 +79,7 @@ resource "random_string" "prefix" {
 }
 ```
 
-## tags
+### tags
 (Required) Map of tags for the deployment
 ```hcl
 variable "tags" {
@@ -94,7 +95,7 @@ tags = {
   }
 ```
 
-## diagnostics_map
+### diagnostics_map
 (Required) Contains the Storage Account and Event Hubs details for operations diagnostics
 ```hcl
 variable "diagnostics_map" {
@@ -110,7 +111,7 @@ Example
   }
 ```
 
-## diagnostics_settings
+### diagnostics_settings
 (Required) Map with the diagnostics settings for virtual network deployment.
 See the required structure in the following example or in the diagnostics module documentation.
 
@@ -133,7 +134,7 @@ diagnostics_settings = {
 }
 ```
 
-## log_analytics_workspace
+### log_analytics_workspace
 (Required) contains the log analytics workspace details for operations diagnostics."
 
 ```hcl
@@ -149,7 +150,7 @@ Example
   }
 ```
 
-## networking_object
+### networking_object
 (Required) Configuration object describing the networking configuration, as described below:
 
 ```hcl
@@ -214,35 +215,44 @@ Sample of network configuration object below
                 nsg_outbound        = []
             }
         }
-}
+        netwatcher = {
+            create = true
+            #create the network watcher for a subscription and for the location of the vnet
+            name   = "nwtest"
+            #name of the network watcher to be created
 
+            flow_logs_settings = {
+                enabled = true
+                retention = true
+                period = 7
+            }
+
+            traffic_analytics_settings = {
+                enabled = true
+            }
+        }
+}
 ```
 
+### convention
+(Required) Naming convention to be used.
+```hcl
+variable "convention" {
+  description = "(Required) Naming convention used"
+}
+```
+Example
+```hcl
+convention = "cafclassic"
+```
 
-# Output
-## vnet
-Returns an object: 
-  "vnet_name"           = azurerm_virtual_network.vnet.name
-  "vnet_adress_space"   = azurerm_virtual_network.vnet.address_space
-  "vnet_id"             = azurerm_virtual_network.vnet.id
-  "vnet_dns"            = azurerm_virtual_network.vnet.dns_servers
+## Output
 
-
-## vnet_obj
-Returns the virtual network object with its full properties details.
-
-## subnet_ids_map_region1
-For all the subnets within the virtual network, returns the list subnets with summary properties. 
-
-## nsg_obj
-For all the subnets within the virtual network, returns the list subnets with their full details for user defined NSG. 
-
-## vnet_subnets
-Returns a map of subnets from the virtual network:
-- key = subnet name
-- value = subnet id
-
-## nsg_vnet
-Returns a map of nsg from the virtual network:
-- key = nsg name
-- value = nsg id
+| Name | Type | Description | 
+| -- | -- | -- | 
+| vnet | map(strings) | For a Vnet, returns: <br> -vnet_name <br> - vnet_adress_space <br> - vnet_id <br> - vnet_dns |
+| vnet_obj | object | Returns the virtual network object with its full properties details. |
+| subnet_ids_map | object | Returns all the subnets objects in the Virtual Network.  | 
+| nsg_obj | object | For all the subnets within the virtual network, returns the list subnets with their full details for user defined NSG. |
+| vnet_subnets | map | Returns a map of subnets from the virtual network: <br> - key = subnet name <br> - value = subnet ID |
+| nsg_vnet | string | Returns a map of nsg from the virtual network: <br>- key = nsg name <br>- value = nsg id |

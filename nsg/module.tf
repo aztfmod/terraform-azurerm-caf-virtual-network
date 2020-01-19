@@ -8,7 +8,8 @@ resource "azurerm_network_security_group" "nsg_obj" {
   tags                    = var.tags
 
   dynamic "security_rule" {
-    for_each = concat(each.value.nsg_inbound, each.value.nsg_outbound)
+    # for_each = concat(each.value.nsg_inbound, each.value.nsg_outbound)
+    for_each = concat(lookup(each.value, "nsg_inbound", []), lookup(each.value, "nsg_outbound", []))
     content {
               name                       = security_rule.value[0]
               priority                   = security_rule.value[1]

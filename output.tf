@@ -25,9 +25,11 @@ output "vnet_subnets" {
   value = merge( {
     for subnet in module.subnets.subnet_ids_map:
     subnet.name => subnet.id
-                },
-    {for subnet in module.special_subnets.subnet_ids_map:
-    subnet.name => subnet.id})
+    }, {
+    for subnet in module.special_subnets.subnet_ids_map:
+    subnet.name => subnet.id
+    }
+    )
 }
 
 output "nsg_vnet" {
@@ -36,4 +38,3 @@ output "nsg_vnet" {
     nsg.name => nsg.id
   }
 }
-

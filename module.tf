@@ -1,8 +1,11 @@
 // Creates the networks virtual network, the subnets and associated NSG, with a special section for AzureFirewallSubnet
 module "caf_name_vnet" {
-  source = "github.com/aztfmod/terraform-azurerm-caf-naming.git?ref=proto"
+  # source  = "git@github.com:aztfmod/terraform-azurerm-caf-naming.git?ref=2001-Refresh"
+
+  source  = "aztfmod/caf-naming/azurerm"
+  version = "~> 0.1.0"
   
-  name    = var.name
+  name    = var.networking_object.vnet.name
   type    = "vnet"
   convention  = var.convention
 }
@@ -57,6 +60,18 @@ module "nsg" {
   location                  = var.location
   log_analytics_workspace   = var.log_analytics_workspace
   diagnostics_map           = var.diagnostics_map
+}
+
+module "traffic_analytics" {
+  source                    = "./traffic_analytics"
+
+  rg                        = var.virtual_network_rg
+  tags                      = var.tags
+  location                  = var.location
+  log_analytics_workspace   = var.log_analytics_workspace
+  diagnostics_map           = var.diagnostics_map
+  nw_config                 = lookup(var.networking_object, "netwatcher", {})
+  nsg                       = module.nsg.nsg_obj
 }
 
 resource "azurerm_subnet_network_security_group_association" "nsg_vnet_association" {
