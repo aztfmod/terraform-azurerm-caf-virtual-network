@@ -1,15 +1,12 @@
 // Creates the networks virtual network, the subnets and associated NSG, with a special section for AzureFirewallSubnet
 module "caf_name_vnet" {
-  source  = "git@github.com:aztfmod/terraform-azurerm-caf-naming.git?ref=2001-Refresh"
-
-  # source  = "aztfmod/caf-naming/azurerm"
-  # version = "~> 0.1.0"
+  source  = "aztfmod/caf-naming/azurerm"
+  version = "~> 0.1.0"
   
   name    = var.networking_object.vnet.name
   type    = "vnet"
   convention  = var.convention
 }
-
 
 resource "azurerm_virtual_network" "vnet" {
   name                  = module.caf_name_vnet.vnet
