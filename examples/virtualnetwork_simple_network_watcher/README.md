@@ -1,6 +1,6 @@
-# Azure Virtual Network 
+# Azure Virtual Network with Network Watcher
 
-Creates a simple Azure Virtual Network test environment.
+Creates a simple Azure Virtual Network test environment with Network Watcher, flow logs and traffic analytics enabled.
 
 ## Usage
 To run this example, simply execute: 

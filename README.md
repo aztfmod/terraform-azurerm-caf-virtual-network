@@ -42,8 +42,8 @@ module "virtual_network" {
 | convention | string | None | Naming convention to be used (check at the naming convention module for possible values).  | 
 | prefix | string | None | Prefix to be used (to be deprecated). | 
 | networking_object | object | None | Virtual Network configuration object as described in the Parameters section.  | 
-| netwatcher | map(strings) | optional | Specifies the pre-existing network watcher configuration to use for this virtual network. The map should be defined as follow:  <br> - name = (name of the pre-existing network watcher configuration) <br> - rg (resource group of the pre-existing network watcher configuration)
-}
+| netwatcher | map(strings) | optional | Specifies the pre-existing network watcher configuration to use for this virtual network. The map should be defined as follow:  <br> - name = (name of the pre-existing network watcher configuration) <br> - rg (resource group of the pre-existing network watcher configuration) | 
+
 
 ## Parameters
 
