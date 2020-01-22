@@ -91,7 +91,9 @@ The object has 3 mandatory sections as follow:
 | subnet_key_name | object | mandatory | specialsubnets is use to create specific subnets where you dont want default NSG to be created, for instance AzureFirewallSubnet must be created via this object. (see below for example) |
 
 #### subnets
+
 For each subnet, create an object that contain the following fields (see example below)
+
 | input | type | optional | comment | 
 | -- | -- | -- | -- | 
 | name | object | mandatory | name of the virtual subnet |
@@ -102,8 +104,11 @@ For each subnet, create an object that contain the following fields (see example
 | delegation | object | optional | defines a subnet delegation feature. takes an object as described in the following example. |
 
 The following sections are optional: 
+
 #### netwatcher
+
 If this object is defined, it will enable network watcher, flow logs and traffic analytics for all the subnets in the Virtual Network. The configuration object is as follow: 
+
 | input | type | optional | comment | 
 | -- | -- | -- | -- | 
 | create | bool | mandatory | determines if network watcher should be created or should be used from a previous deployment. <br> /!\ If set to false, the netwatcher optional variable must be set. | 
