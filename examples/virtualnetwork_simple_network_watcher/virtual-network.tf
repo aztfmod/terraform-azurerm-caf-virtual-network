@@ -1,7 +1,3 @@
-provider "azurerm" {
-  version = "<= 1.40"
-}
-
 module "rg_test" {
   source  = "aztfmod/caf-resource-group/azurerm"
   version = "0.1.1"

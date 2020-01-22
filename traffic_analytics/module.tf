@@ -13,13 +13,12 @@ resource "azurerm_network_watcher" "netwatcher" {
   tags                = var.tags
 }
 
-resource "azurerm_network_watcher_flow_log" "nw_testflow" {
+resource "azurerm_network_watcher_flow_log" "nw_flow" {
   
   for_each = local.nsg 
 
 # if we havent created the azurerm_network_watcher.netwatcher
-# then we take the value given as (optional)
-# logic broken in the case of no data
+# then we take the value given (optional)
   network_watcher_name =  local.checkifcreateconfig ? azurerm_network_watcher.netwatcher[0].name : var.netwatcher.name
   resource_group_name  = local.checkifcreateconfig ? var.rg : var.netwatcher.rg
 

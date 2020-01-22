@@ -1,5 +1,5 @@
 [![Build status](https://dev.azure.com/azure-terraform/Blueprints/_apis/build/status/modules/virtual_network)](https://dev.azure.com/azure-terraform/Blueprints/_build/latest?definitionId=8)
-# Creates a virtual network with associated subnets and network security groups
+# Creates a virtual network with associated subnets, network security groups, analytics
 
 Creates a virtual network with:
 * Virtual network
@@ -29,87 +29,23 @@ module "virtual_network" {
 }
 ```
 
+## Inputs 
+
+| Name | Type | Default | Description | 
+| -- | -- | -- | -- | 
+| virtual_network_rg | string | None | Name of the resource group where to create the resource. Changing this forces a new resource to be created. |
+| location | string | None | Specifies the Azure location to deploy the resource. Changing this forces a new resource to be created.  | 
+| tags | map | None | Map of tags for the deployment.  | 
+| log_analytics_workspace | string | None | Log Analytics Workspace. | 
+| diagnostics_map | map | None | Map with the diagnostics repository information.  | 
+| diagnostics_settings | object | None | Map with the diagnostics settings. See the required structure in the following example or in the diagnostics module documentation. | 
+| convention | string | None | Naming convention to be used (check at the naming convention module for possible values).  | 
+| prefix | string | None | Prefix to be used (to be deprecated). | 
+| networking_object | object | None | Virtual Network configuration object as described in the Parameters section.  | 
+| netwatcher | map(strings) | optional | Specifies the pre-existing network watcher configuration to use for this virtual network. The map should be defined as follow:  <br> - name = (name of the pre-existing network watcher configuration) <br> - rg (resource group of the pre-existing network watcher configuration)
+}
+
 ## Parameters
-
-### virtual_network_rg
-Required) Name of the resource group where to create the vnet
-```hcl
-variable "virtual_network_rg" {
-  description = "(Required) Name of the resource group where to create the vnet"
-  type        = string
-}
-
-```
-Example
-```hcl
-virtual_network_rg = "my-vnet"
-```
-
-### location
-(Required) Define the region where the resource groups will be created
-```hcl
-
-variable "location" {
-  description = "(Required) Define the region where the resource groups will be created"
-  type        = string
-}
-```
-Example
-```
-    location    = "southeastasia"
-```
-
-### prefix
-(Optional) You can use a prefix to add to the list of resource groups you want to create
-```hcl
-variable "prefix" {
-    description = "(Optional) You can use a prefix to add to the list of resource groups you want to create"
-}
-```
-Example
-```hcl
-locals {
-    prefix = "${random_string.prefix.result}-"
-}
-
-resource "random_string" "prefix" {
-    length  = 4
-    upper   = false
-    special = false
-}
-```
-
-### tags
-(Required) Map of tags for the deployment
-```hcl
-variable "tags" {
-  description = "(Required) map of tags for the deployment"
-}
-```
-Example
-```hcl
-tags = {
-    environment     = "DEV"
-    owner           = "Arnaud"
-    deploymentType  = "Terraform"
-  }
-```
-
-### diagnostics_map
-(Required) Contains the Storage Account and Event Hubs details for operations diagnostics
-```hcl
-variable "diagnostics_map" {
-  description = "(Required) contains the SA and EH details for operations diagnostics"
-}
-```
-Example
-```hcl
- diagnostics_map = {
-      diags_sa      = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/operations-rg/providers/Microsoft.Storage/storageAccounts/opslogs"
-      eh_id         = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/operations-rg/providers/Microsoft.EventHub/namespaces/opslogs"
-      eh_name       = "opslogs"
-  }
-```
 
 ### diagnostics_settings
 (Required) Map with the diagnostics settings for virtual network deployment.
@@ -134,31 +70,51 @@ diagnostics_settings = {
 }
 ```
 
-### log_analytics_workspace
-(Required) contains the log analytics workspace details for operations diagnostics."
-
-```hcl
-variable "log_analytics_workspace" {
-  description = "(Required) contains the log analytics workspace details for operations diagnostics"
-}
-```
-Example
-```hcl
-  log_analytics_workspace = {
-        id = "/subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/operations-rg/providers/microsoft.operationalinsights/workspaces/lalogs"
-        name = "lalogs"
-  }
-```
-
 ### networking_object
-(Required) Configuration object describing the networking configuration, as described below:
+(Required) Configuration object describing the networking configuration.
+The object has 3 mandatory sections as follow: 
 
-```hcl
-variable "networking_object" {
-  description = "(Required) configuration object describing the networking configuration, as described below"
-}
-```
-Example
+#### vnet 
+
+| input | type | optional | comment | 
+| -- | -- | -- | -- | 
+| name | string | mandatory | name of the virtul network to be created |
+| address_space  | list | optional | address speace for the subnet |
+| dns  | list | optional | if not provided,uses the default Azure DNS |
+| enable_ddos_std  | bool | mandatory | Determines if DDOS standard protection plan should be used. This does not creates the DDOS standard protection plan that must be created separately. If set to true, requires specifying ddos_id to determine the ddos_standard protection plan to use.  |
+| ddos_id  | string | optional | only needed when enable_ddos_std is set to true. |
+
+#### specialsubnets
+
+| input | type | optional | comment | 
+| -- | -- | -- | -- | 
+| subnet_key_name | object | mandatory | specialsubnets is use to create specific subnets where you dont want default NSG to be created, for instance AzureFirewallSubnet must be created via this object. (see below for example) |
+
+#### subnets
+For each subnet, create an object that contain the following fields (see example below)
+| input | type | optional | comment | 
+| -- | -- | -- | -- | 
+| name | object | mandatory | name of the virtual subnet |
+| cidr | object | mandatory | CIDR block for the virtual subnet |
+| service_endpoints | object | mandatory | service endpoints for the virtual subnet |
+| nsg_inbound | object | optional | network security groups settings - a NSG is always created for each subnet - this section will tune the NSG entries for inbound flows. |
+| nsg_outbound | object | optional | network security groups settings - a NSG is always created for each subnet - this section will tune the NSG entries for outbound flows. |
+| delegation | object | optional | defines a subnet delegation feature. takes an object as described in the following example. |
+
+The following sections are optional: 
+#### netwatcher
+If this object is defined, it will enable network watcher, flow logs and traffic analytics for all the subnets in the Virtual Network. The configuration object is as follow: 
+| input | type | optional | comment | 
+| -- | -- | -- | -- | 
+| create | bool | mandatory | determines if network watcher should be created or should be used from a previous deployment. <br> /!\ If set to false, the netwatcher optional variable must be set. | 
+| name | string | mandatory | name of the network watcher to be created |
+| flow_logs_settings | object | mandatory | specifies the configuration for flow logs according to the following object structure: <br> enabled = (bool) <br>  retention = (bool)  <br>  period = (integer)
+| traffic_analytics_settings | object | mandatory | specifies if traffic analytics should be enabled. If enabled, we use the settings defined in the virtual network settings (log_analytics_workspace). | 
+
+
+
+The following networking_object shows an example of composition: 
+
 ```hcl
 Sample of network configuration object below
   networking_object = {
@@ -234,17 +190,6 @@ Sample of network configuration object below
 }
 ```
 
-### convention
-(Required) Naming convention to be used.
-```hcl
-variable "convention" {
-  description = "(Required) Naming convention used"
-}
-```
-Example
-```hcl
-convention = "cafclassic"
-```
 
 ## Output
 

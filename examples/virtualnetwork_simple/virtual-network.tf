@@ -1,4 +1,3 @@
-
 module "rg_test" {
   source  = "aztfmod/caf-resource-group/azurerm"
   version = "0.1.1"
@@ -31,6 +30,7 @@ module "diags_test" {
   prefix                = local.prefix
   location              = local.location
   tags                  = local.tags
+  enable_event_hub      = local.enable_event_hub
 }
 
 module "vnet_test" {
