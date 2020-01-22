@@ -8,6 +8,6 @@ FEATURES:
 
 IMPROVEMENTS:
 
-Bugs:
+BUGS:
 * **bug fix:** Fix bug when a subnet has no NSG section declared, you cant create the Vnet ([#7](https://github.com/aztfmod/terraform-azurerm-caf-virtual-network/issues/7)) 
 * **bug fix:** Support for eventhub logging is now optionnal ([#3](https://github.com/aztfmod/terraform-azurerm-caf-virtual-network/issues/3)) 
