@@ -10,6 +10,8 @@ resource "azurerm_subnet" "v_subnet" {
   virtual_network_name    = var.virtual_network_name
   address_prefix          = each.value.cidr
   service_endpoints       = lookup(each.value, "service_endpoints", [])
+  enforce_private_link_endpoint_network_policies = lookup(each.value, "enforce_private_link_endpoint_network_policies", null )
+  enforce_private_link_service_network_policies = lookup(each.value, "enforce_private_link_service_network_policies", null)
 
   dynamic "delegation" {
     for_each = lookup(each.value, "delegation", {}) != {} ? [1] : []

@@ -33,3 +33,12 @@ variable "diagnostics_settings" {
 variable "networking_object" {
   description = "(Required) configuration object describing the networking configuration, as described in README"
 }
+
+variable "convention" {
+  description = "(Required) Naming convention method to use"  
+}
+
+variable "netwatcher" {
+  description = "(Optional) is a map with two attributes: name, rg who describes the name and rg where the netwatcher was already deployed" 
+  default = {}
+}
