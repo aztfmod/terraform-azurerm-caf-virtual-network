@@ -1,7 +1,7 @@
 resource "azurerm_subnet" "v_subnet" {
-  lifecycle {
-        ignore_changes = [network_security_group_id]
-    }
+  # lifecycle {
+  #       ignore_changes = [network_security_group_id]
+  #   }
   
   for_each                = var.subnets
 
