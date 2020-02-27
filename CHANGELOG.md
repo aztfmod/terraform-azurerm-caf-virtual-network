@@ -1,6 +1,13 @@
+## v1.1 (February 2020)
+
+BUGS:
+
+* **bug fix:** Issue with provider azurerm 2.0 ([#10](https://github.com/aztfmod/terraform-azurerm-caf-virtual-network/issues/10)) 
+
 ## v1.0 (January 2020)
 
-FEATURES: 
+FEATURES:
+
 * **new feature:**  Add support for traffic analytics and Network flows ([#4](https://github.com/aztfmod/terraform-azurerm-caf-virtual-network/issues/4))
 * **new feature:**  Add support for naming convention ([#5](https://github.com/aztfmod/terraform-azurerm-caf-virtual-network/issues/5))
 * **new feature:**  Add support for private link policies on virtual subnets ([#8](https://github.com/aztfmod/terraform-azurerm-caf-virtual-network/issues/8)) 

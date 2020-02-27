@@ -1,3 +1,7 @@
+provider "azurerm" {
+   features {}
+}
+
 module "rg_test" {
   source  = "aztfmod/caf-resource-group/azurerm"
   version = "0.1.1"
