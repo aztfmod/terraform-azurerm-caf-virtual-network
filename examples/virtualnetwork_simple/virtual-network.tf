@@ -37,6 +37,13 @@ module "diags_test" {
   enable_event_hub      = local.enable_event_hub
 }
 
+resource "azurerm_network_ddos_protection_plan" "ddos_protection_plan" {
+  name                = local.name_ddos
+  location            = local.location
+  resource_group_name = module.rg_test.names.test
+  tags                = local.tags
+}
+
 module "vnet_test" {
   source  = "../.."
     
@@ -49,4 +56,5 @@ module "vnet_test" {
   diagnostics_map                   = module.diags_test.diagnostics_map
   log_analytics_workspace           = module.la_test
   diagnostics_settings              = local.vnet_config.diagnostics
+  ddos_id = azurerm_network_ddos_protection_plan.ddos_protection_plan.id
 }

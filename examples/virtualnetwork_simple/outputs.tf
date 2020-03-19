@@ -21,3 +21,7 @@ output "vnet_subnets" {
 output "nsg_vnet" {
   value = module.vnet_test.nsg_vnet
 }
+
+output "ddos" {
+  value = azurerm_network_ddos_protection_plan.ddos_protection_plan
+}
