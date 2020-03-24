@@ -2,7 +2,7 @@
 
 IMPROVEMENTS:
 
-* **improvement:** Get ddos_id as optional argument at module call ([#x](https://github.com/aztfmod/terraform-azurerm-caf-virtual-network/issues/x))
+* **improvement:** Get ddos_id as optional argument at module call ([13](https://github.com/aztfmod/terraform-azurerm-caf-virtual-network/issues/13))
 
 
 ## v1.1 (February 2020)
