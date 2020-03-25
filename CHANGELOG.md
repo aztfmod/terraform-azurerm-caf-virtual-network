@@ -1,3 +1,9 @@
+## v2.0 (March 2020)
+
+IMPROVEMENTS:
+
+* **improvement:** Add support for azurecaf provider for naming convention
+
 ## v1.2 (March 2020)
 
 IMPROVEMENTS:
