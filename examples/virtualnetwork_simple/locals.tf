@@ -1,5 +1,5 @@
 locals {
-    convention = "cafrandom"
+    convention = "cafclassic"
     name = "caftest-vnet"
     name_la = "caftestlavalid"
     name_diags = "caftestdiags"
@@ -43,8 +43,17 @@ locals {
                 name                = "Network_Monitoring"
                 cidr                = "10.0.0.64/26"
                 service_endpoints   = []
-                nsg_inbound         = []
-                nsg_outbound        = []
+                nsg_inbound         = [
+                    # {"Name", "Priority", "Direction", "Action", "Protocol", "source_port_ranges", "destination_port_ranges", "source_address_prefixes", "destination_address_prefixes", "source_application_security_group_ids", "destination_application_security_group_ids" }, 
+                    ["bastion-in-allow", "100", "Inbound", "Allow", "tcp", ["10-15", "20-25"], ["*"], ["*"], ["*"], [""], [""]],
+                    ["bastion-control-in-allow-443", "120", "Inbound", "Allow", "tcp", ["*"], ["443-444", "446-447"], ["0.0.0.0/0"], ["*"], [""], [""]],
+                    ["bastion-control-in-allow-4443", "121", "Inbound", "Allow", "tcp", ["0-65535"], ["4443"], ["0.0.0.0/0"], ["*"], [""], [""]],
+                ]
+                nsg_outbound        = [
+                    ["bastion-vnet-out-allow-22", "100", "Outbound", "Allow", "tcp", ["0-65535"], ["22"], ["0.0.0.0/0"], ["*"], [""], [""]],
+                    ["bastion-vnet-out-allow-3389", "101", "Outbound", "Allow", "tcp", ["0-65535"], ["3389"], ["0.0.0.0/0"], ["*"], [""], [""]],
+                    ["bastion-azure-out-allow", "120", "Outbound", "Allow", "tcp", ["0-65535"], ["443"], ["0.0.0.0/0"], ["*"], [""], [""]],
+                ]
             }
         }
         diagnostics = {

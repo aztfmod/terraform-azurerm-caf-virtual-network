@@ -9,11 +9,6 @@ variable "location" {
   type        = string
 }
 
-variable "prefix" {
-  description = "(Optional) You can use a prefix to add to the list of resource groups you want to create"
-  type        = string
-}
-
 variable "tags" {
   description = "(Required) map of tags for the deployment"
 }
@@ -45,5 +40,23 @@ variable "netwatcher" {
 
 variable "ddos_id" {
   description = "(Optional) ID of the DDoS protection plan if exists" 
+  default = ""
+}
+
+variable "prefix" {
+  description = "(Optional) You can use a prefix to add to the list of resource groups you want to create"
+  type        = string
+  default = ""
+}
+
+variable "postfix" {
+  description = "(Optional) You can use a prefix to add to the list of resource groups you want to create"
+  type        = string
+  default = ""
+}
+
+variable "max_length" {
+  description = "(Optional) You can use a prefix to add to the list of resource groups you want to create"
+  type        = string
   default = ""
 }
