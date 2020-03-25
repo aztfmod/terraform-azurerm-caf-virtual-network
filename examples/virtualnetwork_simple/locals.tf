@@ -44,15 +44,18 @@ locals {
                 cidr                = "10.0.0.64/26"
                 service_endpoints   = []
                 nsg_inbound         = [
-                    # {"Name", "Priority", "Direction", "Action", "Protocol", "source_port_ranges", "destination_port_ranges", "source_address_prefixes", "destination_address_prefixes", "source_application_security_group_ids", "destination_application_security_group_ids" }, 
-                    ["bastion-in-allow", "100", "Inbound", "Allow", "tcp", ["10-15", "20-25"], ["*"], ["*"], ["*"], [""], [""]],
-                    ["bastion-control-in-allow-443", "120", "Inbound", "Allow", "tcp", ["*"], ["443-444", "446-447"], ["0.0.0.0/0"], ["*"], [""], [""]],
-                    ["bastion-control-in-allow-4443", "121", "Inbound", "Allow", "tcp", ["0-65535"], ["4443"], ["0.0.0.0/0"], ["*"], [""], [""]],
-                ]
-                nsg_outbound        = [
-                    ["bastion-vnet-out-allow-22", "100", "Outbound", "Allow", "tcp", ["0-65535"], ["22"], ["0.0.0.0/0"], ["*"], [""], [""]],
-                    ["bastion-vnet-out-allow-3389", "101", "Outbound", "Allow", "tcp", ["0-65535"], ["3389"], ["0.0.0.0/0"], ["*"], [""], [""]],
-                    ["bastion-azure-out-allow", "120", "Outbound", "Allow", "tcp", ["0-65535"], ["443"], ["0.0.0.0/0"], ["*"], [""], [""]],
+                    # {"Name", "Priority", "Direction", "Action", "Protocol", "source_port_range", "destination_port_range", "source_address_prefix", "destination_address_prefix" }, 
+                    ["W32Time", "100", "Inbound", "Allow", "udp", "*", "123", "*", "*"],
+                    ["RPC-Endpoint-Mapper", "101", "Inbound", "Allow", "tcp", "*", "135", "*", "*"],
+                    ["Kerberos-password-change", "102", "Inbound", "Allow", "*", "*", "464", "*", "*"],
+                    ["RPC-Dynamic-range", "103", "Inbound", "Allow", "tcp", "*", "49152-65535", "*", "*"],
+                    ["LDAP", "104", "Inbound", "Allow", "*", "*", "389", "*", "*"],
+                    ["LDAP-SSL", "105", "Inbound", "Allow", "tcp", "*", "636", "*", "*"],
+                    ["LDAP-GC", "106", "Inbound", "Allow", "tcp", "*", "3268", "*", "*"],
+                    ["LDAP-GC-SSL", "107", "Inbound", "Allow", "tcp", "*", "3269", "*", "*"],
+                    ["DNS", "108", "Inbound", "Allow", "*", "*", "53", "*", "*"],
+                    ["Kerberos", "109", "Inbound", "Allow", "*", "*", "88", "*", "*"],
+                    ["SMB", "110", "Inbound", "Allow", "tcp", "*", "445", "*", "*"],
                 ]
             }
         }
