@@ -2,7 +2,8 @@
 
 IMPROVEMENTS:
 
-* **improvement:** Add support for azurecaf provider for naming convention
+* **improvement:** Add support for azurecaf provider for naming convention ([15](https://github.com/aztfmod/terraform-azurerm-caf-virtual-network/issues/15))
+
 
 ## v1.2 (March 2020)
 
