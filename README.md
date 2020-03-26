@@ -20,7 +20,7 @@ module "virtual_network" {
     source  = "aztfmod/caf-virtual-network/azurerm"
     version = "0.x.y"
 
-    virtual_network_rg                = var.rg
+    resource_group_name               = var.rg
     prefix                            = var.prefix
     location                          = var.location
     networking_object                 = var.shared_services_vnet
@@ -34,7 +34,7 @@ module "virtual_network" {
 
 | Name | Type | Default | Description |
 | -- | -- | -- | -- |
-| virtual_network_rg | string | None | (Required) Name of the resource group where to create the resource. Changing this forces a new resource to be created. |
+| resource_group_name | string | None | (Required) Name of the resource group where to create the resource. Changing this forces a new resource to be created. |
 | location | string | None | (Required) Specifies the Azure location to deploy the resource. Changing this forces a new resource to be created.  |
 | tags | map | None | (Required) Map of tags for the deployment.  |
 | log_analytics_workspace | string | None | (Required) Log Analytics Workspace. |

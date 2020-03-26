@@ -11,7 +11,7 @@ resource "azurecaf_naming_convention" "caf_name_vnet" {
 resource "azurerm_virtual_network" "vnet" {
   name                  = azurecaf_naming_convention.caf_name_vnet.result
   location              = var.location
-  resource_group_name   = var.virtual_network_rg
+  resource_group_name   = var.resource_group_name
   address_space         = var.networking_object.vnet.address_space
   tags                  = local.tags
 
@@ -30,7 +30,7 @@ resource "azurerm_virtual_network" "vnet" {
 module "special_subnets" {
   source                = "./subnet"
 
-  resource_group        = var.virtual_network_rg
+  resource_group        = var.resource_group_name
   virtual_network_name  = azurerm_virtual_network.vnet.name
   subnets               = var.networking_object.specialsubnets
   tags                  = local.tags
@@ -40,7 +40,7 @@ module "special_subnets" {
 module "subnets" {
   source                = "./subnet"
 
-  resource_group        = var.virtual_network_rg
+  resource_group        = var.resource_group_name
   virtual_network_name  = azurerm_virtual_network.vnet.name
   subnets               = var.networking_object.subnets
   tags                  = local.tags
@@ -50,7 +50,7 @@ module "subnets" {
 module "nsg" {
   source                    = "./nsg"
 
-  resource_group            = var.virtual_network_rg
+  resource_group            = var.resource_group_name
   virtual_network_name      = azurerm_virtual_network.vnet.name
   subnets                   = var.networking_object.subnets
   tags                      = local.tags
@@ -62,7 +62,7 @@ module "nsg" {
 module "traffic_analytics" {
   source                    = "./traffic_analytics"
 
-  rg                        = var.virtual_network_rg
+  rg                        = var.resource_group_name
   tags                      = var.tags
   location                  = var.location
   log_analytics_workspace   = var.log_analytics_workspace
