@@ -23,10 +23,12 @@ locals {
         },
     }
 
+    name_ddos = "test_ddos"
+
     vnet_config = {
         vnet = {
             name                = "TestVnet"
-            address_space       = ["10.0.0.0/25"]     
+            address_space       = ["10.0.0.0/25", "192.168.0.0/24"]     
             dns                 = ["192.168.0.16", "192.168.0.64"]
         }
         specialsubnets     = {

@@ -1,8 +1,15 @@
+## v1.2 (March 2020)
+
+IMPROVEMENTS:
+
+* **improvement:** Get ddos_id as optional argument at module call ([13](https://github.com/aztfmod/terraform-azurerm-caf-virtual-network/issues/13))
+
+
 ## v1.1 (February 2020)
 
 BUGS:
 
-* **bug fix:** Issue with provider azurerm 2.0 ([#10](https://github.com/aztfmod/terraform-azurerm-caf-virtual-network/issues/10)) 
+* **bug fix:** Issue with provider azurerm 2.0 ([#10](https://github.com/aztfmod/terraform-azurerm-caf-virtual-network/issues/10))
 
 ## v1.0 (January 2020)
 

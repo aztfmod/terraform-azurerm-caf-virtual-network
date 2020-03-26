@@ -42,3 +42,8 @@ variable "netwatcher" {
   description = "(Optional) is a map with two attributes: name, rg who describes the name and rg where the netwatcher was already deployed" 
   default = {}
 }
+
+variable "ddos_id" {
+  description = "(Optional) ID of the DDoS protection plan if exists" 
+  default = ""
+}

@@ -17,12 +17,12 @@ resource "azurerm_virtual_network" "vnet" {
 
   dns_servers           = lookup(var.networking_object.vnet, "dns", null)
 
-   dynamic "ddos_protection_plan" {
-    for_each = lookup(var.networking_object.vnet, "enable_ddos_std", false) == true ? [1] : []
+  dynamic "ddos_protection_plan" {
+    for_each = var.ddos_id != "" ? [1] : []
     
     content {
-      id     = var.networking_object.vnet.ddos_id
-      enable = var.networking_object.vnet.enable_ddos_std
+      id     = var.ddos_id
+      enable = true
     }
   }
 }
