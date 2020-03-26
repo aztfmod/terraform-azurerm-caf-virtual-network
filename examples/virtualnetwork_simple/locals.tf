@@ -1,5 +1,5 @@
 locals {
-    convention = "cafrandom"
+    convention = "cafclassic"
     name = "caftest-vnet"
     name_la = "caftestlavalid"
     name_diags = "caftestdiags"
@@ -43,8 +43,20 @@ locals {
                 name                = "Network_Monitoring"
                 cidr                = "10.0.0.64/26"
                 service_endpoints   = []
-                nsg_inbound         = []
-                nsg_outbound        = []
+                nsg_inbound         = [
+                    # {"Name", "Priority", "Direction", "Action", "Protocol", "source_port_range", "destination_port_range", "source_address_prefix", "destination_address_prefix" }, 
+                    ["W32Time", "100", "Inbound", "Allow", "udp", "*", "123", "*", "*"],
+                    ["RPC-Endpoint-Mapper", "101", "Inbound", "Allow", "tcp", "*", "135", "*", "*"],
+                    ["Kerberos-password-change", "102", "Inbound", "Allow", "*", "*", "464", "*", "*"],
+                    ["RPC-Dynamic-range", "103", "Inbound", "Allow", "tcp", "*", "49152-65535", "*", "*"],
+                    ["LDAP", "104", "Inbound", "Allow", "*", "*", "389", "*", "*"],
+                    ["LDAP-SSL", "105", "Inbound", "Allow", "tcp", "*", "636", "*", "*"],
+                    ["LDAP-GC", "106", "Inbound", "Allow", "tcp", "*", "3268", "*", "*"],
+                    ["LDAP-GC-SSL", "107", "Inbound", "Allow", "tcp", "*", "3269", "*", "*"],
+                    ["DNS", "108", "Inbound", "Allow", "*", "*", "53", "*", "*"],
+                    ["Kerberos", "109", "Inbound", "Allow", "*", "*", "88", "*", "*"],
+                    ["SMB", "110", "Inbound", "Allow", "tcp", "*", "445", "*", "*"],
+                ]
             }
         }
         diagnostics = {

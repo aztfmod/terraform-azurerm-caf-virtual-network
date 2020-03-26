@@ -20,7 +20,7 @@ module "virtual_network" {
     source  = "aztfmod/caf-virtual-network/azurerm"
     version = "0.x.y"
 
-    virtual_network_rg                = var.rg
+    resource_group_name               = var.rg
     prefix                            = var.prefix
     location                          = var.location
     networking_object                 = var.shared_services_vnet
@@ -34,17 +34,19 @@ module "virtual_network" {
 
 | Name | Type | Default | Description |
 | -- | -- | -- | -- |
-| virtual_network_rg | string | None | (Required) Name of the resource group where to create the resource. Changing this forces a new resource to be created. |
+| resource_group_name | string | None | (Required) Name of the resource group where to create the resource. Changing this forces a new resource to be created. |
 | location | string | None | (Required) Specifies the Azure location to deploy the resource. Changing this forces a new resource to be created.  |
 | tags | map | None | (Required) Map of tags for the deployment.  |
 | log_analytics_workspace | string | None | (Required) Log Analytics Workspace. |
 | diagnostics_map | map | None | (Required) Map with the diagnostics repository information.  |
 | diagnostics_settings | object | None | (Required) Map with the diagnostics settings. See the required structure in the following example or in the diagnostics module documentation. |
 | convention | string | None | (Required) Naming convention to be used (check at the naming convention module for possible values).  |
-| prefix | string | None | (Optional) Prefix to be used. |
 | networking_object | object | None | (Required) Virtual Network configuration object as described in the Parameters section.  |
 | netwatcher | map(strings) | None | (Optional) Specifies the pre-existing network watcher configuration to use for this virtual network. The map should be defined as follow:  <br> - name = (name of the pre-existing network watcher configuration) <br> - rg (resource group of the pre-existing network watcher configuration) |
 | ddos_id  | string | None | (Optional), if this field is set, we will enable ddos for the virtual network using the subscription ID passed with this argument. |
+| prefix | string | None | (Optional) Prefix to be used. |
+| postfix | string | None | (Optional) Postfix to be used. |
+| max_length | string | None | (Optional) maximum length to the name of the resource. |
 
 
 ## Parameters

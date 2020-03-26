@@ -1,16 +1,11 @@
 
-variable "virtual_network_rg" {
+variable "resource_group_name" {
   description = "(Required) Name of the resource group where to create the vnet"
   type        = string
 }
 
 variable "location" {
   description = "(Required) Define the region where the resource groups will be created"
-  type        = string
-}
-
-variable "prefix" {
-  description = "(Optional) You can use a prefix to add to the list of resource groups you want to create"
   type        = string
 }
 
@@ -46,4 +41,22 @@ variable "netwatcher" {
 variable "ddos_id" {
   description = "(Optional) ID of the DDoS protection plan if exists" 
   default = ""
+}
+
+variable "prefix" {
+  description = "(Optional) You can use a prefix to the name of the resource"
+  type        = string
+  default = ""
+}
+
+variable "postfix" {
+  description = "(Optional) You can use a postfix to the name of the resource"
+  type        = string
+  default = ""
+}
+
+variable "max_length" {
+  description = "(Optional) You can speficy a maximum length to the name of the resource"
+  type        = string
+  default = "60"
 }

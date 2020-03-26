@@ -1,17 +1,17 @@
 // Creates the networks virtual network, the subnets and associated NSG, with a special section for AzureFirewallSubnet
-module "caf_name_vnet" {
-  source  = "aztfmod/caf-naming/azurerm"
-  version = "~> 0.1.0"
-  
-  name    = var.networking_object.vnet.name
-  type    = "vnet"
-  convention  = var.convention
+resource "azurecaf_naming_convention" "caf_name_vnet" {  
+  name          = var.networking_object.vnet.name
+  prefix        = var.prefix != "" ? var.prefix : null
+  postfix       = var.postfix != "" ? var.postfix : null
+  max_length    = var.max_length != "" ? var.max_length : null
+  resource_type = "azurerm_virtual_network"
+  convention    = var.convention
 }
 
 resource "azurerm_virtual_network" "vnet" {
-  name                  = module.caf_name_vnet.vnet
+  name                  = azurecaf_naming_convention.caf_name_vnet.result
   location              = var.location
-  resource_group_name   = var.virtual_network_rg
+  resource_group_name   = var.resource_group_name
   address_space         = var.networking_object.vnet.address_space
   tags                  = local.tags
 
@@ -30,7 +30,7 @@ resource "azurerm_virtual_network" "vnet" {
 module "special_subnets" {
   source                = "./subnet"
 
-  resource_group        = var.virtual_network_rg
+  resource_group        = var.resource_group_name
   virtual_network_name  = azurerm_virtual_network.vnet.name
   subnets               = var.networking_object.specialsubnets
   tags                  = local.tags
@@ -40,7 +40,7 @@ module "special_subnets" {
 module "subnets" {
   source                = "./subnet"
 
-  resource_group        = var.virtual_network_rg
+  resource_group        = var.resource_group_name
   virtual_network_name  = azurerm_virtual_network.vnet.name
   subnets               = var.networking_object.subnets
   tags                  = local.tags
@@ -50,7 +50,7 @@ module "subnets" {
 module "nsg" {
   source                    = "./nsg"
 
-  resource_group            = var.virtual_network_rg
+  resource_group            = var.resource_group_name
   virtual_network_name      = azurerm_virtual_network.vnet.name
   subnets                   = var.networking_object.subnets
   tags                      = local.tags
@@ -62,7 +62,7 @@ module "nsg" {
 module "traffic_analytics" {
   source                    = "./traffic_analytics"
 
-  rg                        = var.virtual_network_rg
+  rg                        = var.resource_group_name
   tags                      = var.tags
   location                  = var.location
   log_analytics_workspace   = var.log_analytics_workspace
