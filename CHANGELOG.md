@@ -3,6 +3,7 @@
 IMPROVEMENTS:
 
 * **improvement:** Add support for azurecaf provider for naming convention ([15](https://github.com/aztfmod/terraform-azurerm-caf-virtual-network/issues/15))
+* **improvement:** Change virtual_network_rg input variable name to resource_group_name
 
 
 ## v1.2 (March 2020)
