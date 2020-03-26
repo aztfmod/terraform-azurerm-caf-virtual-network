@@ -58,5 +58,5 @@ variable "postfix" {
 variable "max_length" {
   description = "(Optional) You can speficy a maximum length to the name of the resource"
   type        = string
-  default = ""
+  default = "60"
 }

@@ -1,3 +1,4 @@
+[![Gitter](https://badges.gitter.im/aztfmod/community.svg)](https://gitter.im/aztfmod/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 # Creates a virtual network with associated subnets, network security groups, analytics
 
@@ -40,10 +41,12 @@ module "virtual_network" {
 | diagnostics_map | map | None | (Required) Map with the diagnostics repository information.  |
 | diagnostics_settings | object | None | (Required) Map with the diagnostics settings. See the required structure in the following example or in the diagnostics module documentation. |
 | convention | string | None | (Required) Naming convention to be used (check at the naming convention module for possible values).  |
-| prefix | string | None | (Optional) Prefix to be used. |
 | networking_object | object | None | (Required) Virtual Network configuration object as described in the Parameters section.  |
 | netwatcher | map(strings) | None | (Optional) Specifies the pre-existing network watcher configuration to use for this virtual network. The map should be defined as follow:  <br> - name = (name of the pre-existing network watcher configuration) <br> - rg (resource group of the pre-existing network watcher configuration) |
 | ddos_id  | string | None | (Optional), if this field is set, we will enable ddos for the virtual network using the subscription ID passed with this argument. |
+| prefix | string | None | (Optional) Prefix to be used. |
+| postfix | string | None | (Optional) Postfix to be used. |
+| max_length | string | None | (Optional) maximum length to the name of the resource. |
 
 
 ## Parameters
