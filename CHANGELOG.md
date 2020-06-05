@@ -1,3 +1,10 @@
+## v2.0.1 (June 2020)
+
+IMPROVEMENTS:
+
+* **bug fix:** subnet output now outputs subnet and special subnet ([20] (https://github.com/aztfmod/terraform-azurerm-caf-virtual-network/issues/20))
+
+
 ## v2.0 (March 2020)
 
 IMPROVEMENTS:
