@@ -13,7 +13,7 @@ output "vnet_obj" {
 }
 
 output "subnet_ids_map" {
-  value = module.subnets.subnet_ids_map
+  value = merge(module.special_subnets.subnet_ids_map, module.subnets.subnet_ids_map)
 }
 
 output "nsg_obj" {
