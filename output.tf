@@ -1,7 +1,7 @@
 output "vnet" {
   value = {
   "vnet_name"           = azurerm_virtual_network.vnet.name
-  "vnet_adress_space"   = azurerm_virtual_network.vnet.address_space
+  "vnet_address_space"  = azurerm_virtual_network.vnet.address_space
   "vnet_id"             = azurerm_virtual_network.vnet.id
   "vnet_dns"            = azurerm_virtual_network.vnet.dns_servers
   }

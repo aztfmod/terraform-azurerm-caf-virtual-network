@@ -17,7 +17,7 @@ resource "azurerm_virtual_network" "vnet" {
 
   dns_servers           = lookup(var.networking_object.vnet, "dns", null)
 
-  dynamic "ddos_protection_plan" {
+   dynamic "ddos_protection_plan" {
     for_each = var.ddos_id != "" ? [1] : []
     
     content {

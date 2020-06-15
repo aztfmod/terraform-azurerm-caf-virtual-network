@@ -5,6 +5,8 @@ locals {
     name_diags = "caftestdiags"
     location = "southeastasia"
     prefix = ""
+    max_length = ""
+    postfix = ""
     enable_event_hub = false
     resource_groups = {
         test = { 
@@ -36,36 +38,96 @@ locals {
         subnets = {
             subnet0                 = {
                 name                = "Cycle_Controller"
-                cidr                = "10.101.4.0/25"          
+                cidr                = ["10.101.4.0/25"] 
+                nsg_name            = "Cycle_Controller_nsg"     
             }
             subnet1                 = {
                 name                = "Active_Directory"
-                cidr                = "10.101.4.128/27"
-                # service_endpoints   = []
-                nsg_inbound         = [
-                    # {"Name", "Priority", "Direction", "Action", "Protocol", "source_port_range", "destination_port_range", "source_address_prefix", "destination_address_prefix" }, 
-                    ["LDAP", "100", "Inbound", "Allow", "*", "*", "389", "*", "*"],
-                    ["RPC-EPM", "102", "Inbound", "Allow", "tcp", "*", "135", "*", "*"],
-                    ["SMB-In", "103", "Inbound", "Allow", "tcp", "*", "445", "*", "*"],
+                cidr                = ["10.101.4.128/27"]
+                nsg_name            = "Active_Directory_nsg"
+                nsg                 = [
+                     {
+                         name = "W32Time",
+                         priority = "100"
+                         direction = "Inbound"
+                         access = "Allow"
+                         protocol = "UDP"
+                         source_port_range = "*"
+                         destination_port_range = "123"
+                         source_address_prefix = "*"
+                         destination_address_prefix = "*"
+                     },
+                     {
+                         name = "RPC-Endpoint-Mapper",
+                         priority = "101"
+                         direction = "Inbound"
+                         access = "Allow"
+                         protocol = "UDP"
+                         source_port_range = "*"
+                         destination_port_range = "135"
+                         source_address_prefix = "*"
+                         destination_address_prefix = "*"
+                     },
+                     {
+                         name = "Kerberos-password-change",
+                         priority = "102"
+                         direction = "Inbound"
+                         access = "Allow"
+                         protocol = "*"
+                         source_port_range = "*"
+                         destination_port_range = "464"
+                         source_address_prefix = "*"
+                         destination_address_prefix = "*"
+                     },
+                     {
+                         name = "RPC-Dynamic-range",
+                         priority = "103"
+                         direction = "Inbound"
+                         access = "Allow"
+                         protocol = "tcp"
+                         source_port_range = "*"
+                         destination_port_range = "49152-65535"
+                         source_address_prefix = "*"
+                         destination_address_prefix = "*"
+                     },
+                     {
+                         name = "RPC-Dynamic-range",
+                         priority = "103"
+                         direction = "Inbound"
+                         access = "Allow"
+                         protocol = "tcp"
+                         source_port_range = "*"
+                         destination_port_range = "49152-65535"
+                         source_address_prefix = "*"
+                         destination_address_prefix = "*"
+                     }
                 ]
-                nsg_outbound        = [
-                    ["o-LDAP-t", "100", "Outbound", "Allow", "*", "*", "389", "*", "*"],
-                    ["o-SMB-In", "103", "Outbound", "Allow", "tcp", "*", "445", "*", "*"],
-                ]       
             }
             subnet2                 = {
                 name                = "SQL_Servers"
-                cidr                = "10.101.4.160/27"
+                cidr                = ["10.101.4.160/27"]
                 # service_endpoints   = []
-                nsg_inbound         = [
-                    # {"Name", "Priority", "Direction", "Action", "Protocol", "source_port_range", "destination_port_range", "source_address_prefix", "destination_address_prefix" }, 
-                    ["TDS-In", "100", "Inbound", "Allow", "tcp", "*", "1433", "*", "*"],
-                ]       
+                nsg_name            = "SQL_Servers_nsg"
+                nsg                 = [
+                     {
+                         name = "TDS",
+                         priority = "100"
+                         direction = "Inbound"
+                         access = "Allow"
+                         protocol = "*"
+                         source_port_range = "*"
+                         destination_port_range = "1433"
+                         source_address_prefix = "*"
+                         destination_address_prefix = "*"
+                     }
+                ]
             }
             subnet3                 = {
                 name                = "Network_Monitoring"
-                cidr                = "10.101.4.192/27"
-                service_endpoints   = ["Microsoft.Sql"]          
+                cidr                = ["10.101.4.192/27"]
+                service_endpoints   = ["Microsoft.Sql"]
+                nsg_name            = "Network_Monitoring_nsg"
+      
             }
         }
         diagnostics = {

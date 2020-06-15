@@ -1,3 +1,14 @@
+## v3.0.0 (June 2020)
+
+**breaking changes:** Introduces breaking changes in the input/output variable
+
+IMPROVEMENTS:
+
+* **improvement:** Remove deprecated address_prefix variable for the subnet in favour of address_prefixes (requires azurem 2.8.0 and above) ([18](https://github.com/aztfmod/terraform-azurerm-caf-virtual-network/issues/18))
+* **improvement:** Added custom NSG name option ([21](https://github.com/aztfmod/terraform-azurerm-caf-virtual-network/issues/21))
+* **improvement:** Added additonal configuration options for NSG ([21](https://github.com/aztfmod/terraform-azurerm-caf-virtual-network/issues/21))
+
+
 ## v2.0.1 (June 2020)
 
 IMPROVEMENTS:

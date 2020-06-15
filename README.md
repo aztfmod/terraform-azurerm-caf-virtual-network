@@ -1,4 +1,4 @@
-[![Gitter](https://badges.gitter.im/aztfmod/community.svg)](https://gitter.im/aztfmod/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![VScodespaces](https://img.shields.io/endpoint?url=https%3A%2F%2Faka.ms%2Fvso-badge)](https://online.visualstudio.com/environments/new?name=terraform-azurerm-caf-virtual-network&repo=aztfmod/terraform-azurerm-caf-virtual-network)
 
 # Creates a virtual network with associated subnets, network security groups, analytics
 
@@ -103,10 +103,10 @@ For each subnet, create an object that contain the following fields (see example
 | input | type | optional | comment |
 | -- | -- | -- | -- |
 | name | object | mandatory | name of the virtual subnet |
+| nsg_name | object | mandatory | name of the nsg ruleset |
 | cidr | object | mandatory | CIDR block for the virtual subnet |
 | service_endpoints | object | mandatory | service endpoints for the virtual subnet |
-| nsg_inbound | object | optional | network security groups settings - a NSG is always created for each subnet - this section will tune the NSG entries for inbound flows. |
-| nsg_outbound | object | optional | network security groups settings - a NSG is always created for each subnet - this section will tune the NSG entries for outbound flows. |
+| nsg  | object | optional | network security groups settings - a NSG is always created for each subnet - this section will tune the NSG entries for inbound and outbound flows. |
 | delegation | object | optional | defines a subnet delegation feature. takes an object as described in the following example. |
 
 The following sections are optional:
@@ -137,13 +137,13 @@ Sample of network configuration object below
         specialsubnets     = {
                 AzureFirewallSubnet = {
                 name                = "AzureFirewallSubnet"
-                cidr                = "10.101.4.0/25"
+                cidr                = ["10.101.4.0/25"]
                }
             }
         subnets = {
             Subnet_1        = {
                 name                = "Active_Directory"
-                cidr                = "10.101.4.128/27"
+                cidr                = ["10.101.4.128/27"]
                 service_endpoints   = []
                 nsg_inbound         = [
                     # {"Name", "Priority", "Direction", "Action", "Protocol", "source_port_range", "destination_port_range", "source_address_prefix", "destination_address_prefix" },
@@ -162,7 +162,7 @@ Sample of network configuration object below
             }
             Subnet_2             = {
                 name                = "SQL_Servers"
-                cidr                = "10.101.4.160/27"
+                cidr                = ["10.101.4.160/27"]
                 service_endpoints   = []
                 nsg_inbound         = [
                     ["SQL", "100", "Inbound", "Allow", "tcp", "*", "1433", "*", "*"],
@@ -171,7 +171,7 @@ Sample of network configuration object below
             }
             Subnet_3       = {
                 name                = "Network_Monitoring"
-                cidr                = "10.101.4.192/27"
+                cidr                = ["10.101.4.192/27"]
                 service_endpoints   = ["Microsoft.EventHub"]
                 nsg_inbound         = [
                     # ["Test", "101", "Inbound", "Allow", "tcp", "*", "1643", "*", "*"],

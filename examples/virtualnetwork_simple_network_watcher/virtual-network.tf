@@ -1,36 +1,47 @@
 provider "azurerm" {
-   features {}
+  version = "2.13.0"
+  features {}
 }
 
-module "rg_test" {
-  source  = "aztfmod/caf-resource-group/azurerm"
-  version = "0.1.1"
-  
-    prefix          = local.prefix
-    resource_groups = local.resource_groups
-    tags            = local.tags
+provider "azurecaf" {
+
+}
+
+resource "azurecaf_naming_convention" "rg_test" {  
+  name          = local.resource_groups.test.name
+  prefix        = local.prefix != "" ? local.prefix : null
+  postfix       = local.postfix != "" ? local.postfix : null
+  max_length    = local.max_length != "" ? local.max_length : null
+  resource_type = "azurerm_resource_group"
+  convention    = local.convention
+}
+
+resource "azurerm_resource_group" "rg_test" {
+  name     = azurecaf_naming_convention.rg_test.result
+  location = local.resource_groups.test.location
+  tags     = local.tags
 }
 
 module "la_test" {
   source  = "aztfmod/caf-log-analytics/azurerm"
-  version = "1.0.0"
+  version = "2.1.0"
   
     convention          = local.convention
     location            = local.location
     name                = local.name_la
     solution_plan_map   = local.solution_plan_map 
     prefix              = local.prefix
-    resource_group_name = module.rg_test.names.test
+    resource_group_name = azurerm_resource_group.rg_test.name
     tags                = local.tags
 }
 
 module "diags_test" {
   source  = "aztfmod/caf-diagnostics-logging/azurerm"
-  version = "1.0.0"
+  version = "2.0.1"
 
   name                  = local.name_diags
   convention            = local.convention
-  resource_group_name   = module.rg_test.names.test
+  resource_group_name   = azurerm_resource_group.rg_test.name
   prefix                = local.prefix
   location              = local.location
   tags                  = local.tags
@@ -41,7 +52,7 @@ module "vnet_test" {
   source  = "../.."
     
   convention                        = local.convention
-  virtual_network_rg                = module.rg_test.names.test
+  resource_group_name               = azurerm_resource_group.rg_test.name
   prefix                            = local.prefix
   location                          = local.location
   networking_object                 = local.vnet_config

@@ -1,16 +1,31 @@
 provider "azurerm" {
-   features {}
+  version = "2.13.0"
+  features {}
+}
+
+provider "azurecaf" {
+  
+}
+
+resource "azurecaf_naming_convention" "rg_test" {  
+  name          = local.resource_groups.test.name
+  prefix        = local.prefix != "" ? local.prefix : null
+  postfix       = local.postfix != "" ? local.postfix : null
+  max_length    = local.max_length != "" ? local.max_length : null
+  resource_type = "azurerm_resource_group"
+  convention    = local.convention
 }
 
 resource "azurerm_resource_group" "rg_test" {
-  name     = local.resource_groups.test.name
+  name     = azurecaf_naming_convention.rg_test.result
   location = local.resource_groups.test.location
   tags     = local.tags
 }
 
+
 module "la_test" {
   source  = "aztfmod/caf-log-analytics/azurerm"
-  version = "2.0.0"
+  version = "2.1.0"
  
   convention          = local.convention
   location            = local.location
@@ -23,7 +38,7 @@ module "la_test" {
 
 module "diags_test" {
   source  = "aztfmod/caf-diagnostics-logging/azurerm"
-  version = "1.0.0"
+  version = "2.0.1"
  
   name                  = local.name_diags
   convention            = local.convention
@@ -45,7 +60,7 @@ module "vnet_test" {
   source  = "../.."
     
   convention                        = local.convention
-  resource_group_name               = azurerm_resource_group.rg_test.name
+  resource_group_name                = azurerm_resource_group.rg_test.name
   prefix                            = local.prefix
   location                          = local.location
   networking_object                 = local.vnet_config

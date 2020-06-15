@@ -1,10 +1,12 @@
 locals {
-    convention = "cafclassic"
+    convention = "cafrandom"
     name = "caftest-vnet"
-    name_la = "caftestlavalid"
+    name_la = "aztfmodcaftestlavalid"
     name_diags = "caftestdiags"
     location = "southeastasia"
     prefix = ""
+    max_length = ""
+    postfix = ""
     enable_event_hub = false
     resource_groups = {
         test = { 
@@ -34,28 +36,72 @@ locals {
         specialsubnets     = {
             AzureFirewallSubnet     = {
                 name                = "AzureFirewallSubnet"
-                cidr                = "10.0.0.0/26"
+                cidr                = ["10.0.0.0/26"]
                 service_endpoints   = []
             }
             }
         subnets = {
             subnet1                 = {
                 name                = "Network_Monitoring"
-                cidr                = "10.0.0.64/26"
+                cidr                = ["10.0.0.64/26"]
                 service_endpoints   = []
-                nsg_inbound         = [
-                    # {"Name", "Priority", "Direction", "Action", "Protocol", "source_port_range", "destination_port_range", "source_address_prefix", "destination_address_prefix" }, 
-                    ["W32Time", "100", "Inbound", "Allow", "udp", "*", "123", "*", "*"],
-                    ["RPC-Endpoint-Mapper", "101", "Inbound", "Allow", "tcp", "*", "135", "*", "*"],
-                    ["Kerberos-password-change", "102", "Inbound", "Allow", "*", "*", "464", "*", "*"],
-                    ["RPC-Dynamic-range", "103", "Inbound", "Allow", "tcp", "*", "49152-65535", "*", "*"],
-                    ["LDAP", "104", "Inbound", "Allow", "*", "*", "389", "*", "*"],
-                    ["LDAP-SSL", "105", "Inbound", "Allow", "tcp", "*", "636", "*", "*"],
-                    ["LDAP-GC", "106", "Inbound", "Allow", "tcp", "*", "3268", "*", "*"],
-                    ["LDAP-GC-SSL", "107", "Inbound", "Allow", "tcp", "*", "3269", "*", "*"],
-                    ["DNS", "108", "Inbound", "Allow", "*", "*", "53", "*", "*"],
-                    ["Kerberos", "109", "Inbound", "Allow", "*", "*", "88", "*", "*"],
-                    ["SMB", "110", "Inbound", "Allow", "tcp", "*", "445", "*", "*"],
+                nsg_name            = "network_monitoring_nsg"
+                nsg                 = [
+                     {
+                         name = "W32Time",
+                         priority = "100"
+                         direction = "Inbound"
+                         access = "Allow"
+                         protocol = "UDP"
+                         source_port_range = "*"
+                         destination_port_range = "123"
+                         source_address_prefix = "*"
+                         destination_address_prefix = "*"
+                     },
+                     {
+                         name = "RPC-Endpoint-Mapper",
+                         priority = "101"
+                         direction = "Inbound"
+                         access = "Allow"
+                         protocol = "UDP"
+                         source_port_range = "*"
+                         destination_port_range = "135"
+                         source_address_prefix = "*"
+                         destination_address_prefix = "*"
+                     },
+                     {
+                         name = "Kerberos-password-change",
+                         priority = "102"
+                         direction = "Inbound"
+                         access = "Allow"
+                         protocol = "*"
+                         source_port_range = "*"
+                         destination_port_range = "464"
+                         source_address_prefix = "*"
+                         destination_address_prefix = "*"
+                     },
+                     {
+                         name = "RPC-Dynamic-range",
+                         priority = "103"
+                         direction = "Inbound"
+                         access = "Allow"
+                         protocol = "tcp"
+                         source_port_range = "*"
+                         destination_port_range = "49152-65535"
+                         source_address_prefix = "*"
+                         destination_address_prefix = "*"
+                     },
+                     {
+                         name = "RPC-Dynamic-range",
+                         priority = "103"
+                         direction = "Inbound"
+                         access = "Allow"
+                         protocol = "tcp"
+                         source_port_range = "*"
+                         destination_port_range = "49152-65535"
+                         source_address_prefix = "*"
+                         destination_address_prefix = "*"
+                     }
                 ]
             }
         }

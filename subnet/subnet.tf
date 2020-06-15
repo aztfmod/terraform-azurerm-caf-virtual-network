@@ -8,7 +8,7 @@ resource "azurerm_subnet" "v_subnet" {
   name                    = each.value.name
   resource_group_name     = var.resource_group
   virtual_network_name    = var.virtual_network_name
-  address_prefix          = each.value.cidr
+  address_prefixes        = each.value.cidr
   service_endpoints       = lookup(each.value, "service_endpoints", [])
   enforce_private_link_endpoint_network_policies = lookup(each.value, "enforce_private_link_endpoint_network_policies", null )
   enforce_private_link_service_network_policies = lookup(each.value, "enforce_private_link_service_network_policies", null)
