@@ -1,10 +1,16 @@
 provider "azurerm" {
-  version = "2.13.0"
   features {}
 }
 
-provider "azurecaf" {
-
+terraform {
+  required_providers {
+    azurecaf = {
+      source = "aztfmod/azurecaf"
+    }
+    azurerm = {
+      source = "hashicorp/azurerm"
+    }
+  }
 }
 
 resource "azurecaf_naming_convention" "rg_test" {
@@ -23,8 +29,9 @@ resource "azurerm_resource_group" "rg_test" {
 }
 
 module "la_test" {
-  source  = "aztfmod/caf-log-analytics/azurerm"
-  version = "2.1.0"
+  source = "github.com/aztfmod/terraform-azurerm-caf-log-analytics?ref=vnext"
+  # source  = "aztfmod/caf-log-analytics/azurerm"
+  # version = "2.1.0"
 
   convention          = local.convention
   location            = local.location
@@ -36,8 +43,9 @@ module "la_test" {
 }
 
 module "diags_test" {
-  source  = "aztfmod/caf-diagnostics-logging/azurerm"
-  version = "2.0.1"
+  source = "github.com/aztfmod/terraform-azurerm-caf-diagnostics-logging?ref=vnext"
+  # source  = "aztfmod/caf-diagnostics-logging/azurerm"
+  # version = "2.0.1"
 
   name                = local.name_diags
   convention          = local.convention
