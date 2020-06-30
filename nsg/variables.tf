@@ -33,5 +33,5 @@ variable "link_nsg_to_subnet" {
 
 variable "opslogs_retention_period" {
   description = "Number of days to keep operations logs inside storage account"
-  default = 60
+  default     = 60
 }

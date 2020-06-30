@@ -30,33 +30,33 @@ variable "networking_object" {
 }
 
 variable "convention" {
-  description = "(Required) Naming convention method to use"  
+  description = "(Required) Naming convention method to use"
 }
 
 variable "netwatcher" {
-  description = "(Optional) is a map with two attributes: name, rg who describes the name and rg where the netwatcher was already deployed" 
-  default = {}
+  description = "(Optional) is a map with two attributes: name, rg who describes the name and rg where the netwatcher was already deployed"
+  default     = {}
 }
 
 variable "ddos_id" {
-  description = "(Optional) ID of the DDoS protection plan if exists" 
-  default = ""
+  description = "(Optional) ID of the DDoS protection plan if exists"
+  default     = ""
 }
 
 variable "prefix" {
   description = "(Optional) You can use a prefix to the name of the resource"
   type        = string
-  default = ""
+  default     = ""
 }
 
 variable "postfix" {
   description = "(Optional) You can use a postfix to the name of the resource"
   type        = string
-  default = ""
+  default     = ""
 }
 
 variable "max_length" {
   description = "(Optional) You can speficy a maximum length to the name of the resource"
   type        = string
-  default = "60"
+  default     = "60"
 }
