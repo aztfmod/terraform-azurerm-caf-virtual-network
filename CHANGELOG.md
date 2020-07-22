@@ -1,3 +1,10 @@
+## v3.1.0 (July 2020)
+
+IMPROVEMENTS:
+
+* **improvement:** Support for Terraform 013 ([24](https://github.com/aztfmod/terraform-azurerm-caf-virtual-network/issues/24))
+
+
 ## v3.0.0 (June 2020)
 
 **breaking changes:** Introduces breaking changes in the input/output variable

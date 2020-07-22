@@ -17,37 +17,24 @@ Creates a virtual network with:
 Reference the module to a specific version (recommended):
 ```hcl
 module "virtual_network" {
-    source  = "aztfmod/caf-virtual-network/azurerm"
-    version = "0.x.y"
+  source  = "aztfmod/caf-virtual-network/azurerm"
+  version = "0.x.y"
 
-    resource_group_name               = var.rg
-    prefix                            = var.prefix
-    location                          = var.location
-    networking_object                 = var.shared_services_vnet
-    tags                              = var.tags
-    diagnostics_map                   = var.diagnostics_map
-    log_analytics_workspace           = var.log_analytics_workspace
+  convention              = local.convention
+  resource_group_name     = azurerm_resource_group.rg_test.name
+  prefix                  = local.prefix
+  location                = local.location
+  networking_object       = local.vnet_config
+  tags                    = local.tags
+  diagnostics_map         = module.diags_test.diagnostics_map
+  log_analytics_workspace = module.la_test
+  diagnostics_settings    = local.vnet_config.diagnostics
+  ddos_id                 = azurerm_network_ddos_protection_plan.ddos_protection_plan.id
+
 }
 ```
-
-## Inputs 
-
-| Name | Type | Default | Description |
-| -- | -- | -- | -- |
-| resource_group_name | string | None | (Required) Name of the resource group where to create the resource. Changing this forces a new resource to be created. |
-| location | string | None | (Required) Specifies the Azure location to deploy the resource. Changing this forces a new resource to be created.  |
-| tags | map | None | (Required) Map of tags for the deployment.  |
-| log_analytics_workspace | string | None | (Required) Log Analytics Workspace. |
-| diagnostics_map | map | None | (Required) Map with the diagnostics repository information.  |
-| diagnostics_settings | object | None | (Required) Map with the diagnostics settings. See the required structure in the following example or in the diagnostics module documentation. |
-| convention | string | None | (Required) Naming convention to be used (check at the naming convention module for possible values).  |
-| networking_object | object | None | (Required) Virtual Network configuration object as described in the Parameters section.  |
-| netwatcher | map(strings) | None | (Optional) Specifies the pre-existing network watcher configuration to use for this virtual network. The map should be defined as follow:  <br> - name = (name of the pre-existing network watcher configuration) <br> - rg (resource group of the pre-existing network watcher configuration) |
-| ddos_id  | string | None | (Optional), if this field is set, we will enable ddos for the virtual network using the subscription ID passed with this argument. |
-| prefix | string | None | (Optional) Prefix to be used. |
-| postfix | string | None | (Optional) Postfix to be used. |
-| max_length | string | None | (Optional) maximum length to the name of the resource. |
-
+<!--- BEGIN_TF_DOCS --->
+<!--- END_TF_DOCS --->
 
 ## Parameters
 
@@ -198,13 +185,3 @@ Sample of network configuration object below
 }
 ```
 
-## Output
-
-| Name | Type | Description |
-| -- | -- | -- |
-| vnet | map(strings) | For a Vnet, returns: <br> -vnet_name <br> - vnet_adress_space <br> - vnet_id <br> - vnet_dns |
-| vnet_obj | object | Returns the virtual network object with its full properties details. |
-| subnet_ids_map | object | Returns all the subnets objects in the Virtual Network.  | 
-| nsg_obj | object | For all the subnets within the virtual network, returns the list subnets with their full details for user defined NSG. |
-| vnet_subnets | map | Returns a map of subnets from the virtual network: <br> - key = subnet name <br> - value = subnet ID |
-| nsg_vnet | string | Returns a map of nsg from the virtual network: <br>- key = nsg name <br>- value = nsg id |

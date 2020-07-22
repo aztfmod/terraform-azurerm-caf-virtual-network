@@ -1,4 +1,5 @@
 output "vnet" {
+  description = "For a Vnet, returns: <br> -vnet_name <br> - vnet_adress_space <br> - vnet_id <br> - vnet_dns"
   value = {
     "vnet_name"          = azurerm_virtual_network.vnet.name
     "vnet_address_space" = azurerm_virtual_network.vnet.address_space
@@ -13,6 +14,7 @@ output "vnet_obj" {
 }
 
 output "subnet_ids_map" {
+  description = "Returns all the subnets objects in the Virtual Network. As a map of keys, ID"
   value = merge(module.special_subnets.subnet_ids_map, module.subnets.subnet_ids_map)
 }
 
@@ -22,6 +24,7 @@ output "nsg_obj" {
 }
 
 output "vnet_subnets" {
+  description = "Returns a map of subnets from the virtual network: <br> - key = subnet name <br> - value = subnet ID"
   value = merge({
     for subnet in module.subnets.subnet_ids_map :
     subnet.name => subnet.id
@@ -33,6 +36,7 @@ output "vnet_subnets" {
 }
 
 output "nsg_vnet" {
+  description = "Returns a map of nsg from the virtual network: <br>- key = nsg name <br>- value = nsg id"
   value = {
     for nsg in module.nsg.nsg_obj :
     nsg.name => nsg.id
