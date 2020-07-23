@@ -1,5 +1,5 @@
 // Creates the networks virtual network, the subnets and associated NSG, with a special section for AzureFirewallSubnet
-resource "azurecaf_naming_convention" "caf_name_vnet" {  
+resource "azurecaf_naming_convention" "caf_name_vnet" {
   name          = var.networking_object.vnet.name
   prefix        = var.prefix != "" ? var.prefix : null
   postfix       = var.postfix != "" ? var.postfix : null
@@ -9,17 +9,17 @@ resource "azurecaf_naming_convention" "caf_name_vnet" {
 }
 
 resource "azurerm_virtual_network" "vnet" {
-  name                  = azurecaf_naming_convention.caf_name_vnet.result
-  location              = var.location
-  resource_group_name   = var.resource_group_name
-  address_space         = var.networking_object.vnet.address_space
-  tags                  = local.tags
+  name                = azurecaf_naming_convention.caf_name_vnet.result
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  address_space       = var.networking_object.vnet.address_space
+  tags                = local.tags
 
-  dns_servers           = lookup(var.networking_object.vnet, "dns", null)
+  dns_servers = lookup(var.networking_object.vnet, "dns", null)
 
-   dynamic "ddos_protection_plan" {
+  dynamic "ddos_protection_plan" {
     for_each = var.ddos_id != "" ? [1] : []
-    
+
     content {
       id     = var.ddos_id
       enable = true
@@ -28,52 +28,52 @@ resource "azurerm_virtual_network" "vnet" {
 }
 
 module "special_subnets" {
-  source                = "./subnet"
+  source = "./subnet"
 
-  resource_group        = var.resource_group_name
-  virtual_network_name  = azurerm_virtual_network.vnet.name
-  subnets               = var.networking_object.specialsubnets
-  tags                  = local.tags
-  location              = var.location
+  resource_group       = var.resource_group_name
+  virtual_network_name = azurerm_virtual_network.vnet.name
+  subnets              = var.networking_object.specialsubnets
+  tags                 = local.tags
+  location             = var.location
 }
 
 module "subnets" {
-  source                = "./subnet"
+  source = "./subnet"
 
-  resource_group        = var.resource_group_name
-  virtual_network_name  = azurerm_virtual_network.vnet.name
-  subnets               = var.networking_object.subnets
-  tags                  = local.tags
-  location              = var.location
+  resource_group       = var.resource_group_name
+  virtual_network_name = azurerm_virtual_network.vnet.name
+  subnets              = var.networking_object.subnets
+  tags                 = local.tags
+  location             = var.location
 }
 
 module "nsg" {
-  source                    = "./nsg"
+  source = "./nsg"
 
-  resource_group            = var.resource_group_name
-  virtual_network_name      = azurerm_virtual_network.vnet.name
-  subnets                   = var.networking_object.subnets
-  tags                      = local.tags
-  location                  = var.location
-  log_analytics_workspace   = var.log_analytics_workspace
-  diagnostics_map           = var.diagnostics_map
+  resource_group          = var.resource_group_name
+  virtual_network_name    = azurerm_virtual_network.vnet.name
+  subnets                 = var.networking_object.subnets
+  tags                    = local.tags
+  location                = var.location
+  log_analytics_workspace = var.log_analytics_workspace
+  diagnostics_map         = var.diagnostics_map
 }
 
 module "traffic_analytics" {
-  source                    = "./traffic_analytics"
+  source = "./traffic_analytics"
 
-  rg                        = var.resource_group_name
-  tags                      = var.tags
-  location                  = var.location
-  log_analytics_workspace   = var.log_analytics_workspace
-  diagnostics_map           = var.diagnostics_map
-  nw_config                 = lookup(var.networking_object, "netwatcher", {})
-  nsg                       = module.nsg.nsg_obj
-  netwatcher                = var.netwatcher
+  rg                      = var.resource_group_name
+  tags                    = var.tags
+  location                = var.location
+  log_analytics_workspace = var.log_analytics_workspace
+  diagnostics_map         = var.diagnostics_map
+  nw_config               = lookup(var.networking_object, "netwatcher", {})
+  nsg                     = module.nsg.nsg_obj
+  netwatcher              = var.netwatcher
 }
 
 resource "azurerm_subnet_network_security_group_association" "nsg_vnet_association" {
-  for_each                  = module.subnets.subnet_ids_map
+  for_each = module.subnets.subnet_ids_map
 
   subnet_id                 = module.subnets.subnet_ids_map[each.key].id
   network_security_group_id = module.nsg.nsg_obj[each.key].id
